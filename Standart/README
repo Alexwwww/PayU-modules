@@ -1,9 +1,9 @@
 $PayU = new PayU( '__YOUR_MERCHANT__', '__YOUR_SECRET_KEY__' );
 
-#<b>Чтение IPN ответа от сервера PayU</b>
+Чтение IPN ответа от сервера PayU
 
-#Для этого в качестве ссылки ответа для IPN необходимо указать ссылку вида
-#  http://yourdomain.com/form.php?read=1
+Для этого в качестве ссылки ответа для IPN необходимо указать ссылку вида http://yourdomain.com/form.php?read=1
+  
 
  if ( isset( $_GET['read'] )  ) 
 {
@@ -20,7 +20,7 @@ $PayU = new PayU( '__YOUR_MERCHANT__', '__YOUR_SECRET_KEY__' );
     die( $answer );
 }
 
-#<b>Создание формы для передачи данных на сервер PayU</b>
+#Создание формы для передачи данных на сервер PayU
 
   else  
 {
