@@ -1,6 +1,6 @@
 $PayU = new PayU( '__YOUR_MERCHANT__', '__YOUR_SECRET_KEY__' );
 
-<b>Чтение IPN ответа от сервера PayU</b>
+Чтение IPN ответа от сервера PayU
 
 Для этого в качестве ссылки ответа для IPN необходимо указать ссылку вида http://yourdomain.com/form.php?read=1
   
