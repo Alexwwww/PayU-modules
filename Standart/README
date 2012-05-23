@@ -1,43 +1,59 @@
-$PayU = new PayU( '__YOUR_MERCHANT__', '__YOUR_SECRET_KEY__' );
+Стандартный класс для интеграции PayU 
+
+
+1. подключение файла с классом PayU
+
+include_once "PayU.cls.php";
+
+2. Генерация формы для создания запроса на PayU
+
+Создаем массив данных : 
+
+$forSend = array (
+          #'ORDER_REF' => $orderID, # Ордер. Если не указывать - создастся автоматически
+          #'ORDER_DATE' => date("Y-m-d H:i:s"), # Дата платежа ( Y-m-d H:i:s ). Необязательный параметр.
+          'ORDER_PNAME' => array( "Test_goods", "Тест товар №1", "Test_goods3" ), # Массив с названиями товаров
+          'ORDER_PCODE' => array( "testgoods1", "testgoods2", "testgoods3" ), # Массив с кодами товаров
+          'ORDER_PINFO' => array( "", "", "" ), # Массив с описанием товаров
+          'ORDER_PRICE' => array( "0.10", "0.11", "0.12" ), # Массив с ценами
+          'ORDER_QTY' => array( 1, 2, 1 ),  # Массив с колличеством каждого товара
+          'ORDER_VAT' => array( 0, 0, 0 ),  # Массив с указанием НДС для каждого товара
+          'ORDER_SHIPPING' => 0 , # Стоимость доставки
+          'PRICES_CURRENCY' => "UAH",  # Валюта мерчанта (Внимание! Должно соответствовать валюте мерчанта. )
+          'LANGUAGE' => "RU",  
+          'BILL_FNAME' => "TEST"
+          #.. все остальные параметры
+          );
+
+# Для отключения тестового режима уберите второй параметр в методе pushArray или измените на 0
+
+
+$pay = PayU::getInst()->setMerch( "MERCHANT", 'SECRET_KEY')->pushArray( $forSend, 1 ); 
+
+Варианты вывода формы : 
+1) echo $pay;
+2) echo $pay->form;
+
+Вывод формы после предварительной инициализации
+1)  $pay2 = PayU::getInst();
+    echo $pay2;
+2)  echo PayU::getInst();
+
+-------------------------------------------------
 
 Чтение IPN ответа от сервера PayU
 
+PayU возвращает информацию на IPN только в случае успешной оплаты.
+
 Для этого в качестве ссылки ответа для IPN необходимо указать ссылку вида http://yourdomain.com/form.php?read=1
-  
 
- if ( isset( $_GET['read'] )  ) 
+if( isset($_GET['answer']) )
 {
-        $check = $PayU->getPostData()->checkHashSignature();
+  $payansewer = PayU::getInst()->setMerch('MERCHANT', 'SECRET_KEY')->checkSign();
+  echo $payansewer;
 
-    if ( !$check )  die( "Incorrect signature" );
-    $answer = $PayU->createAnswer();
-
-    /*
-      Do something
-      Variable with data - $PayU->post or $_POST
-    */
-
-    die( $answer );
-}
-
-#Создание формы для передачи данных на сервер PayU
-
-  else  
-{
-
-    $orderID = md5( "payuTestOrder_".time() );
-    $forSend = array (
-              'ORDER_REF' => $orderID, # Uniqe order 
-              'ORDER_DATE' => date("Y-m-d H:i:s"), # Date of paying ( Y-m-d H:i:s ) 
-              'ORDER_PNAME' => array( "Test_goods" ), # Array with data of goods
-              'ORDER_PCODE' => array( "testgoods1" ), # Array with codes of goods
-              'ORDER_PINFO' => array( "" ), # Array with additional data of goods
-              'ORDER_PRICE' => array( "0.10" ), # Array with prices of goods
-              'ORDER_QTY' => array( 1 ), # Array with data of counts of each goods 
-              'ORDER_VAT' => array( 0 ), # Array with VAT of each goods
-              'ORDER_SHIPPING' => 0.1 , # Shipping cost
-              'PRICES_CURRENCY' => "UAH"  # Currency
-             );
-    $form = $PayU->update( $forSend )->debug(1)->getForm(); # for real mode need use 0 on method "debug" 
-    echo $form;
+  #----------------
+  # оплата успешна.
+  # Выполнить доп. операции 
+  #----------------
 }
