@@ -4,6 +4,13 @@
 1. подключение файла с классом PayU
 
 include_once "PayU.cls.php";
+$option  = array( 'merchant' => 'MERCHANT', 'secretkey' => 'SECRETKEY' /*[, 'debug' => 1 ...] изменение доп параметров */ );
+	Дополнительные параметры : 
+		luUrl : Ссылка для LiveUpdate, по-умолчанию : https://secure.payu.ua/order/lu.php
+		$button : Контент кнопки (также можно добавить дополнительные поля или контент) , по-умолчанию : "<input type='submit'>"
+		$debug : Включить режим отладки, по-умолчанию выключен : 0, для включения передать 1
+		$showinputs : Задает тип для input (использовать для проверки полей), по-умолчанию  "hidden"
+
 
 2. Генерация формы для создания запроса на PayU
 
@@ -25,14 +32,9 @@ $forSend = array (
           #.. все остальные параметры
           );
 
-# Для отключения тестового режима уберите второй параметр в методе pushArray или измените на 0
 
-
-$pay = PayU::getInst()->setMerch( "MERCHANT", 'SECRET_KEY')->pushArray( $forSend, 1 ); 
-
-Варианты вывода формы : 
-1) echo $pay;
-2) echo $pay->form;
+$pay = PayU::getInst()->setOptions( $option )->setData( $forSend )->LU();
+echo $pay; # вывод формы
 
 Вывод формы после предварительной инициализации
 1)  $pay2 = PayU::getInst();
@@ -45,11 +47,11 @@ $pay = PayU::getInst()->setMerch( "MERCHANT", 'SECRET_KEY')->pushArray( $forSend
 
 PayU возвращает информацию на IPN только в случае успешной оплаты.
 
-Для этого в качестве ссылки ответа для IPN необходимо указать ссылку вида http://yourdomain.com/form.php?read=1
+Для этого в качестве ссылки ответа для IPN необходимо указать ссылку вида http://yourdomain.com/form.php?answer=1
 
 if( isset($_GET['answer']) )
 {
-  $payansewer = PayU::getInst()->setMerch('MERCHANT', 'SECRET_KEY')->checkSign();
+  $payansewer = PayU::getInst()->setOptions( $option )->IPN();
   echo $payansewer;
 
   #----------------
