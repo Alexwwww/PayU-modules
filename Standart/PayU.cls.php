@@ -180,5 +180,27 @@ class PayU
 	}
 
 #======================= END IPN ============================
-}
+
+#======================= Check BACK_REF =====================
+	function checkBackRef( $type = "http")
+	{
+		$path = $type.'://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+		$tmp = explode("?", $path);
+		$url = $tmp[0].'?';
+		$params = array();
+		foreach ($_GET as $k => $v)
+		{
+			if ( $k != "ctrl" ) $params[] = $k.'='.rawurlencode($v);
+		}
+		$url = $url.implode("&", $params);
+		$arr = array($url);
+		$sign = $this->Signature( $arr );
+
+		#echo "$sign === ".$_GET['ctrl'];
+		$this->answer = ( $sign === $_GET['ctrl'] ) ? true : false;
+		return $this->answer;
+	}
+
+#======================= END Check BACK_REF =================
+
 ?>

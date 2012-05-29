@@ -20,10 +20,22 @@ $forSend = array (
 					'BILL_FNAME' => "TEST" # ...  etc.
 				  );
 
-if( !isset($_GET['answer']) )
+#Create form
+if( !isset($_GET['answer']) && !isset( $_GET['ctrl'] ))
 {
 	$pay = PayU::getInst()->setOptions( $option )->setData( $forSend )->LU();
 	echo $pay;
+}
+
+#Check for real BACK_REF
+#$pay true|false
+if (isset($_GET['ctrl']))
+{
+	
+$pay = PayU::getInst()->setOptions( $option )->checkBackRef();
+if ( $pay ) echo "Real request";
+	else echo "Fake request";
+
 }
 
 # Read answer (IPN)
@@ -33,21 +45,4 @@ if( isset($_GET['answer']) )
 	echo $payansewer;
 }
 
-
-
-
-
-
-
-
-
 ?>
-<!---
-<form>
-Write (LU)
-Read (IPN)
-Request (IDN)
-Refund (IRN)
-
-</form>
---->

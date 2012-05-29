@@ -59,3 +59,18 @@ if( isset($_GET['answer']) )
   # Выполнить доп. операции 
   #----------------
 }
+
+-------------------------------------------------
+
+Проверка ссылки, по которой вернулся клиент (BACK_REF)
+
+Если на сайте используется SSL протокол, указывайте 'https' в качестве параметра метода checkBackRef  : ( ..->checkBackRef('https') )
+
+if (isset($_GET['ctrl']))
+{
+  
+$pay = PayU::getInst()->setOptions( $option )->checkBackRef();
+if ( $pay ) echo "Real request";
+  else echo "Fake request";
+
+}
