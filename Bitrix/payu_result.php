@@ -16,9 +16,6 @@ if (CModule::IncludeModule('sale'))
   
   $payID = $arOrder['PAY_SYSTEM_ID'];
 
-  #$payData = CSalePaySystemAction::GetByID( $payID );
-
-
   $temp = CSalePaySystemAction::GetList(
             array(),
             array( "PAY_SYSTEM_ID" => $payID )
