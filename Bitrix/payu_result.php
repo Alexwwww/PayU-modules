@@ -15,6 +15,10 @@ if (CModule::IncludeModule('sale'))
   $arOrder = CSaleOrder::GetByID($ORDER_ID);
   
   $payID = $arOrder['PAY_SYSTEM_ID'];
+<<<<<<< HEAD
+=======
+  #$payData = CSalePaySystemAction::GetByID( $payID );
+>>>>>>> 02de1e8e87e0183f97eb237bcbd6545ff9ac503b
 
   $temp = CSalePaySystemAction::GetList(
             array(),
@@ -22,6 +26,10 @@ if (CModule::IncludeModule('sale'))
      );
   $payData = $temp->Fetch();
 
+<<<<<<< HEAD
+=======
+  #echo var_dump($payData);
+>>>>>>> 02de1e8e87e0183f97eb237bcbd6545ff9ac503b
   include  $_SERVER['DOCUMENT_ROOT'].$payData['ACTION_FILE']."/payu.cls.php"; 
   
   $b = unserialize( $payData['PARAMS'] );
@@ -36,6 +44,11 @@ if (CModule::IncludeModule('sale'))
   $answer = $PayU->createAnswer();
   $stmp = strtotime( $_POST['SALEDATE'] );
   $arFields = array(
+<<<<<<< HEAD
+=======
+        "STATUS_ID" => "P",
+        "PAYED" => "Y",
+>>>>>>> 02de1e8e87e0183f97eb237bcbd6545ff9ac503b
         "PS_STATUS" => "Y", 
         "PS_STATUS_CODE" => $_POST['ORDERSTATUS'] ,
         "PS_STATUS_DESCRIPTION" => $_POST['ORDERSTATUS']. " " . $_POST['PAYMETHOD'] ,

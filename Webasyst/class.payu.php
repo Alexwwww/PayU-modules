@@ -158,7 +158,7 @@
 
 			$payu->update( $data )->debug( $this->_getSettingValue('CONF_PAYU_DEBUG_MODE') );
 
-			$result_url = $this->_getSettingValue('CONF_ALLIEDWALLET_RETURN_URL');
+			$result_url = $this->_getSettingValue('CONF_PAYU_BACK_REF');
 			if ($result_url !== "NO") $payu->data['BACK_REF'] = ($result_url !== "") ? $result_url : htmlentities($this->getTransactionResultURL('success'),ENT_QUOTES,'utf-8');
 
 			$form = $payu->getForm();
