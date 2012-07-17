@@ -55,10 +55,10 @@ class PayU
 #--------------------------------------------------------
 #	Generate HASH
 #--------------------------------------------------------
-	function md5_hmac( $data ) 
+	/*function md5_hmac($key = null, $data) 
 	{	
-		$key = self::$key;
-		$b = 64;
+		if ( $key == null ) $key = self::$key;
+  		$b = 64;
  		if (strlen($key) > $b) $key = pack("H*",md5($key));
   		$key  = str_pad($key, $b, chr(0x00));
   		$ipad = str_pad('', $b, chr(0x36));
@@ -66,13 +66,16 @@ class PayU
   		$k_ipad = $key ^ $ipad;
   		$k_opad = $key ^ $opad;
   		return md5($k_opad  . pack("H*", md5($k_ipad . $data)));
-	}
+  		#$this->md5_hmac( self::$key, $str );
+	}*/
 
-	function Signature( $data ) 
+	function Signature( $data = null ) 
 	{		
 		$str = "";
-		foreach ( $data as $k => $v ) $str .= $this->convData( $v );
-		return $this->md5_hmac( $str );
+		if ( $data == null ) $data = &$this->data;
+		$this->checkArray( $data );
+		foreach ( $this->cells as $v ) $str .= $this->convData( $data[$v] );
+		return hash_hmac("md5",$str, self::$key);
 	}
 
 #--------------------------------------------------------
