@@ -74,7 +74,7 @@ class PayU
 		$str = "";
 		if ( $data == null ) $data = &$this->data;
 		$this->checkArray( $data );
-		foreach ( $this->cells as $v ) $str .= $this->convData( $data[$v] );
+		foreach ( $this->cells as $v ) $str .= ( isset( $data[$v]) ) ?  $this->convData( $data[$v] ) : "";
 		return hash_hmac("md5",$str, self::$key);
 	}
 
@@ -123,11 +123,15 @@ class PayU
 #-----------------------------
 	private function checkArray( $data )
 	{
+		$this->cells = array();
 		$ret = array();
 		foreach ( $this->LUcell as $k => $v ) 
 		{ 	
-			if ( isset($data[$k]) ) $ret[$k] = $data[$k];
-			elseif ( $v == 1 ) die("$k is not set");
+			if ( isset($data[$k]) ) 
+			{
+				$ret[$k] = $data[$k];
+				$this->cells[] = $k;
+			} elseif ( $v == 1 ) die("$k is not set");
 		}
 		return $ret;
 	}
@@ -163,6 +167,7 @@ class PayU
 		$arr = &$this->dataArr;
 		$arr = $_POST;
 		foreach ( $this->IPNcell as $name ) if ( !isset( $arr[ $name ] ) ) die( "Incorrect data" );
+		$this->cells = $this->IPNcell;
 
 		$hash = $arr["HASH"];  
 		unset( $arr["HASH"] );
