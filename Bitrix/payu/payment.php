@@ -36,25 +36,26 @@ while ($ar_res = $db_res->Fetch())
    $arCurOrderProps[(strlen($ar_res["CODE"])>0) ? $ar_res["CODE"] : $ar_res["ID"]] = $ar_res["VALUE"];
 
 
-$option  = array( 'merchant' => 'MERCHANT', 'secretkey' => 'SECRETKEY', 'debug' => 1 );
-
-
-$PayU = new PayU( CSalePaySystemAction::GetParamValue("MERCHANT"), CSalePaySystemAction::GetParamValue("SECURE_KEY") );
-$PayU->url = CSalePaySystemAction::GetParamValue("LU_URL");
+$option  = array( 
+                'merchant' => CSalePaySystemAction::GetParamValue("MERCHANT"), 
+                'secretkey' => CSalePaySystemAction::GetParamValue("SECURE_KEY"), 
+                'debug' => CSalePaySystemAction::GetParamValue("DEBUG_MODE") 
+                );
+$lu = CSalePaySystemAction::GetParamValue("LU_URL");
+if ( $lu != "" ) $option['luUrl'] = $lu;
 
 $orderID = "PayuOrder_".$ORDER_ID."_".CSaleBasket::GetBasketUserID()."_". md5( "payuOrder_".time() );
 
- $backref = CSalePaySystemAction::GetParamValue("BACK_REF");
+$backref = CSalePaySystemAction::GetParamValue("BACK_REF");
   
 
- $forSend = array (
+$forSend = array (
           'ORDER_REF' => $orderID, # Uniqe order 
-          #'ORDER_DATE' => date("Y-m-d H:i:s"), # Date of paying ( Y-m-d H:i:s ) 
+          'ORDER_DATE' => date("Y-m-d H:i:s"), # Date of paying ( Y-m-d H:i:s ) 
           'ORDER_SHIPPING' => $arOrder['PRICE_DELIVERY'],
           'PRICES_CURRENCY' => CSalePaySystemAction::GetParamValue("PRICE_CURRENCY"), # Currency
           'DISCOUNT' => $arOrder['DISCOUNT_VALUE'],
           'LANGUAGE' => CSalePaySystemAction::GetParamValue("LANGUAGE"),
-
           );
 
 if ( $backref != "" ) $forSend['BACK_REF'] = $backref;
@@ -70,6 +71,10 @@ foreach ( $arBasketItems as $val )
   $forSend['ORDER_VAT'][] = $val['VAT_RATE'];
 }
  
+
+$pay = PayU::getInst()->setOptions( $option )->setData( $forSend )->LU();
+  echo $pay;
+
  /* 
   $forSend += array(
                     'ORDER_SHIPPING' => $arOrder['PRICE_DELIVERY'], # Shipping cost
@@ -82,8 +87,8 @@ foreach ( $arBasketItems as $val )
 
   $backref = CSalePaySystemAction::GetParamValue("BACK_REF");
   if ( $backref != "" ) $PayU->data['BACK_REF'] = $backref;
-*/
+
 
   $form = $PayU->getForm();
 
-  echo $form;
+  echo $form;*/

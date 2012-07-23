@@ -28,12 +28,13 @@ if (CModule::IncludeModule('sale'))
   
   foreach ( $b as $k => $v ) $payuOpt[$k] = $v['VALUE'];
   
-  $PayU = new PayU( $payuOpt["MERCHANT"], $payuOpt["SECURE_KEY"] );
-  $check = $PayU->getPostData()->checkHashSignature();
-  if ( !$check )  die( "Incorrect signature" );
+  $option  = array( 
+                'merchant' => $payuOpt["MERCHANT"], 
+                'secretkey' => $payuOpt["SECURE_KEY"], 
+                );
 
+  $payansewer = PayU::getInst()->setOptions( $option )->IPN();
 
-  $answer = $PayU->createAnswer();
   $stmp = strtotime( $_POST['SALEDATE'] );
   $arFields = array(
         "STATUS_ID" => "P",
@@ -47,7 +48,7 @@ if (CModule::IncludeModule('sale'))
         "PS_RESPONSE_DATE" => date( "d.m.Y H:i:s" ),
       );
     CSaleOrder::Update( $ORDER_ID, $arFields );
-  echo $answer;
+  echo $payansewer;
 }
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_after.php");
