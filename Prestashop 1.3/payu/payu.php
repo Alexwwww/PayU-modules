@@ -73,6 +73,10 @@ class payu extends PaymentModule
 						<td><input type="text" name="back_ref" value="'.$this->Payu_getVar("back_ref").'" style="width: 300px;" /></td>
 					</tr>
 					<tr>
+						<td width="130" style="height: 35px;">'.$this->l('НДС').'</td>
+						<td><input type="text" name="vat" value="'.$this->Payu_getVar("vat").'" style="width: 300px;" /></td>
+					</tr>
+					<tr>
 						<td width="130" style="height: 35px;">'.$this->l('Language of payment page').'</td>
 						<td><input type="text" name="language" value="'.$this->Payu_getVar("language").'" style="width: 300px;" /></td>
 					</tr>
