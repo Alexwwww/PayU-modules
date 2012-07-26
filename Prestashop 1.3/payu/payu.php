@@ -135,6 +135,7 @@ class payu extends PaymentModule
 			Configuration::updateValue('PAYU_DEBUG_MODE', Tools::getValue('debug_mode'));
 			Configuration::updateValue('PAYU_BACK_REF', Tools::getValue('back_ref'));
 			Configuration::updateValue('PAYU_LANGUAGE', Tools::getValue('language'));
+			Configuration::updateValue('PAYU_VAT', Tools::getValue('vat'));
 		}
 		$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('ok').'" /> '.$this->l('Settings updated').'</div>';
 	}
