@@ -38,6 +38,7 @@ $forSend = array();
 
 foreach ( $cart->getProducts() as $item )
 {	
+	#echo "<!-- ", var_dump($item)," -->";
 	$price = round( $item['price'], 3 );
 	if ( $item['price'] > $price ) $price += 0.001;
 
@@ -45,7 +46,7 @@ foreach ( $cart->getProducts() as $item )
 	$forSend['ORDER_PCODE'][] = $item['id_product'];
 	$forSend['ORDER_PINFO'][] = $item['description_short'];
 	$forSend['ORDER_PRICE'][] = $price;
-	$forSend['ORDER_QTY'][] = $item['quantity'];
+	$forSend['ORDER_QTY'][] = $item['cart_quantity'];
 	$forSend['ORDER_VAT'][] = $payu->Payu_getVar("vat");
 	
 }
